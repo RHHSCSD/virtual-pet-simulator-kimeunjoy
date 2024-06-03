@@ -8,9 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import static java.lang.System.exit;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author michael.roy-diclemen
+ * 
+ * //NOT YET DONE- DOING LAPTOP MAINTENANCE
  */
 public class VirtualPet {
 
@@ -44,94 +48,84 @@ public class VirtualPet {
         System.out.println("       ＼二) \n");
         System.out.println("\tDUCKCAT: a pet simulator game\n");
         
-        for (int i = 0; i < 3; i++){
-            //read in user & password
-            System.out.println("INPUT USERNAME: "); 
-            String username = kb.nextLine();
-            System.out.println("INPUT PASSWORD: "); 
-            String password = kb.nextLine();
-        
+        System.out.println("INPUT USERNAME: "); 
+        String username = kb.nextLine();
         //if password and username correct, increase verification by 1
-            if ((username.equals(correctUser)) && (password.equals(correctPass))){
-                verification++;
-                i = 10;
-            }
-            else{
-            }
-        }
-        
-        if (verification < 1){ 
-            System.exit(0);
-            }
+            //if ((username.equals(correctUser)) && (password.equals(correctPass))){
+            File f = new File(username+".txt");
+            try {
+                Scanner fileInitRead = new Scanner(f);
+                username = kb.nextLine();
+                String corrPassword = fileInitRead.nextLine();
+                coins = fileInitRead.nextInt();
 
-        //print start menu, take input
-        while (firstMenu == 0){
-            System.out.println("WELCOME TO DUCKCAT, A PET SIMULATOR GAME! 1) START 2) INSTRUCTIONS 3) EXIT : ");
-            String menu = kb.nextLine();
-            //move to next screen depending on option chosen
-            switch(menu){
-                case "START":
-                case "1": choosePet = 1;
-                firstMenu++;
-                break;
-                case "2": System.out.println("mewomeoewmeowMEWOEOWOWMEOW"); break;
-                case "EXIT":
-                case "3": 
-                    exitGame(correctUser, correctPass, coins, stats);
-                    break;
-                default: System.out.println("that is not a valid choice.");break;
-            }
-        //if moved on to choosing pet, offer pet options
-            if (choosePet == 1){
+                for (int i = 0; i < stats.length; i++)
+                    for (int j = 0; j < stats[i].length; j++){
+                        (stats[i][j]) = fileInitRead.nextInt();
+                }
+
+
+                fileInitRead.close();
+                for (int i = 0; i < 3; i++){
+                    System.out.println("INPUT PASSWORD: "); 
+                    String password = kb.nextLine();
+                    if (password.equals(corrPassword)){
+                        verification++;
+                        break;
+                    }
+                }
+}
+            catch (FileNotFoundException ex) {
+                System.out.println("WELCOME TO DUCKCAT, A PET SIMULATOR GAME!");
                 System.out.println("WHAT PET WILL YOU CHOOSE? 1) DUCK 2) CAT : "); 
             //read in pet wanted and assign based on choice
-                String pet = kb.nextLine();
-                switch(pet){
-                    case "DUCK":
-                    case "1": pet = "DUCK"; break;
-                    case "CAT":
-                    case "2": pet = "CAT";break;
-                    default: System.out.println("THAT IS NOT A PET OPTION."); System.exit(0); break;
-                }
+                    String pet = kb.nextLine();
+                    switch(pet){
+                        case "DUCK":
+                        case "1": pet = "DUCK"; break;
+                        case "CAT":
+                        case "2": pet = "CAT";break;
+                        default: System.out.println("THAT IS NOT A PET OPTION."); System.exit(0); break;
+                    }
             //print chosen pet
                 System.out.println("YOU HAVE CHOSEN " + pet);
                 petChosen++;
                 alive++;
                 
-            }
-        
-        
-        //if verified, give naming options
-            if (petChosen == 1){
-                name = nameCreate();
-                        }
+                if (petChosen == 1){
+                    name = nameCreate();
+                            }
                     
-                System.out.println("WELCOME " + name);
+                    System.out.println("WELCOME " + name);
                 
           
                 
                 //array 0 in primary array is health, 1 is food, 2 is energy
                 //item 0 in each secondary array is max, 1 is current, 2 is amount of times said option has been picked
                     
-                int STARTPOOL = 20; 
+                    int STARTPOOL = 20; 
                 //max health
-                stats[0][0] = r.nextInt(15,STARTPOOL)-10;
-                stats[0][1] = stats[0][0];
-                stats[0][2] = 0;
-                STARTPOOL -= stats[0][0];
+                    stats[0][0] = r.nextInt(15,STARTPOOL)-10;
+                    stats[0][1] = stats[0][0];
+                    stats[0][2] = 0;
+                    STARTPOOL -= stats[0][0];
                 //max food
-                stats[1][0] = r.nextInt(7,STARTPOOL)-2; 
-                stats[1][1] = stats[1][0];
-                stats[1][2] = 0;
-                STARTPOOL -= stats[0][1];
+                    stats[1][0] = r.nextInt(7,STARTPOOL)-2; 
+                    stats[1][1] = stats[1][0];
+                    stats[1][2] = 0;
+                    STARTPOOL -= stats[0][1];
                 //max energy
-                stats[2][0] = STARTPOOL;
-                stats[2][1] = stats[2][0];
-                stats[2][2] = 0;
+                    stats[2][0] = STARTPOOL;
+                    stats[2][1] = stats[2][0];
+                    stats[2][2] = 0;
+            }
             }
         
-        
-            while ((firstMenu != 0)&&(alive == 1)){
+            if (verification < 1){ 
+                System.exit(0);
+            }
+
+            while (alive == 1){
                 
                 System.out.println("WELCOME TO THE PET MENU! 1) PLAY/INTERACT 2) INSTRUCTIONS 3) EXIT : ");
                 String petMenuResponse = kb.nextLine();
@@ -197,11 +191,22 @@ public class VirtualPet {
             }
         //end brackets
     }
+                
+                }
+        
+        
+        //if verified, give naming options
+                
+
+        //print start menu, take input
+
+        //end brackets
+    }
     
-            public static int matchingGame(int coins){
-                String defaultString = "aabbccddee";
-                String scrambledString = ""; 
-                Random scrambler = new Random(); 
+    public static int matchingGame(int coins){
+        String defaultString = "aabbccddee";
+        String scrambledString = ""; 
+        Random scrambler = new Random(); 
                 Scanner kb = new Scanner(System.in);
                 int randomPos = 0; 
                 String referenceString = ""; 
@@ -283,7 +288,7 @@ public class VirtualPet {
                 }
             }
         
-            public static int guessingGame(int coins){
+    public static int guessingGame(int coins){
                 System.out.println("I'M THINKING OF A NUMBER BETWEEN 1-100... PLEASE GUESS! YOU HAVE 5 TRIES.");
                 Scanner guessRead = new Scanner(System.in);
                 Random numGen = new Random();
@@ -312,7 +317,7 @@ public class VirtualPet {
                 }
                 return (coins + coinsEarned);
             }
-        public static String nameCreate(){
+    public static String nameCreate(){
             Scanner kb = new Scanner(System.in);
             Random r = new Random();
             String name = "";
@@ -372,7 +377,7 @@ public class VirtualPet {
         } 
         
         //energy/play
-        public static int[] playPet(int coins, int energy, int maxEnergy){
+    public static int[] playPet(int coins, int energy, int maxEnergy){
             //create an array to store coins and food
             int[]coinsAndEnergy = new int[2];
             if (coins > 3){
@@ -391,7 +396,7 @@ public class VirtualPet {
         
         //feed
         
-        public static int[] feedPet(int coins, int food, int maxFood){
+    public static int[] feedPet(int coins, int food, int maxFood){
             //create an array to store coins and food
             int[]coinsAndFood = new int[2];
             if (coins > 3){
@@ -410,7 +415,7 @@ public class VirtualPet {
         
         //health/groom
         
-        public static int[] groomPet(int coins, int health, int maxHealth){
+    public static int[] groomPet(int coins, int health, int maxHealth){
             //create an array to store coins and food
             int[]coinsAndHealth = new int[2];
             if (coins > 3){
@@ -427,24 +432,28 @@ public class VirtualPet {
         return coinsAndHealth;
         }
         
-        public static void exitGame(String username, String password, int coins, int[][] stats){
+    public static void exitGame(String username, String password, int coins, int[][] stats){
             
             PrintWriter output = null;
         try {
+            //create file with username, create printwriter
             File userData = new File(username + ".txt");
             output = new PrintWriter(userData);
-            //
+            //output password, coins, and statistics to file
             output.println(password);
+            output.println(pet);
             output.println(coins);
             for (int i = 0; i < stats.length; i++)
                 for (int j = 0; j < stats[i].length; j++){
                     output.println(stats[i][j]);
                 }
-            //
+            //print success message
             System.out.println("GAME EXITED AND SAVED! GO HOME.");
+            //if file nonexistent, print error message
         } catch (FileNotFoundException ex) {
             System.out.println("CAN'T WRITE TO FILE. YOUR PET WILL NOT BE SAVED.");
         } finally {
+            //close file and exit program
             output.close();
             System.exit(0);
         }
